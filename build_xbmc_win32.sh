@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #
-# @FFMPEG - version agnostic win32 build script for ffmpeg n1.1 and onwards
+# @FFMPEG - build_xbmc_win32.sh (v1.1)
+# Version agnostic win32 build script adjusted for ffmpeg n1.1 and onwards...
 # 
 
 MAKEFLAGS=""
