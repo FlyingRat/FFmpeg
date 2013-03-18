@@ -224,6 +224,16 @@ static int dxva2_mpeg2_start_frame(AVCodecContext *avctx,
     ctx_pic->slice_alloc    = 0;
     ctx_pic->bitstream_size = 0;
     ctx_pic->bitstream      = NULL;
+
+    if (ctx->last_slice_count > 0)
+    {
+        ctx_pic->slice = av_fast_realloc(NULL,
+                                         &ctx_pic->slice_alloc,
+                                         ctx->last_slice_count * sizeof(DXVA_SliceInfo));
+        if (!ctx_pic->slice)
+            return -1;
+    }
+
     return 0;
 }
 
@@ -258,6 +268,7 @@ static int dxva2_mpeg2_end_frame(AVCodecContext *avctx)
     struct MpegEncContext *s = avctx->priv_data;
     struct dxva2_picture_context *ctx_pic =
         s->current_picture_ptr->f.hwaccel_picture_private;
+    struct dxva_context *ctx = avctx->hwaccel_context;
     int ret;
 
     if (ctx_pic->slice_count <= 0 || ctx_pic->bitstream_size <= 0)
@@ -268,6 +279,8 @@ static int dxva2_mpeg2_end_frame(AVCodecContext *avctx)
                                     commit_bitstream_and_slice_buffer);
     if (!ret)
         ff_mpeg_draw_horiz_band(s, 0, avctx->height);
+
+    ctx->last_slice_count = ctx_pic->slice_count;
     return ret;
 }
 
