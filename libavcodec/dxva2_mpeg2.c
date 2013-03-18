@@ -22,12 +22,12 @@
 
 #include "dxva2_internal.h"
 
-#define MAX_SLICES (SLICE_MAX_START_CODE - SLICE_MIN_START_CODE + 1)
 struct dxva2_picture_context {
     DXVA_PictureParameters pp;
     DXVA_QmatrixData       qm;
     unsigned               slice_count;
-    DXVA_SliceInfo         slice[MAX_SLICES];
+    DXVA_SliceInfo         *slice;
+    unsigned int           slice_alloc;
 
     const uint8_t          *bitstream;
     unsigned               bitstream_size;
@@ -220,6 +220,8 @@ static int dxva2_mpeg2_start_frame(AVCodecContext *avctx,
     fill_quantization_matrices(avctx, ctx, s, &ctx_pic->qm);
 
     ctx_pic->slice_count    = 0;
+    ctx_pic->slice          = NULL;
+    ctx_pic->slice_alloc    = 0;
     ctx_pic->bitstream_size = 0;
     ctx_pic->bitstream      = NULL;
     return 0;
@@ -232,9 +234,14 @@ static int dxva2_mpeg2_decode_slice(AVCodecContext *avctx,
     struct dxva2_picture_context *ctx_pic =
         s->current_picture_ptr->f.hwaccel_picture_private;
     unsigned position;
+    DXVA_SliceInfo* slice;
 
-    if (ctx_pic->slice_count >= MAX_SLICES)
+    slice = av_fast_realloc(ctx_pic->slice,
+                            &ctx_pic->slice_alloc,
+                            (ctx_pic->slice_count + 1) * sizeof(DXVA_SliceInfo));
+    if (!slice)
         return -1;
+    ctx_pic->slice = slice;
 
     if (!ctx_pic->bitstream)
         ctx_pic->bitstream = buffer;
