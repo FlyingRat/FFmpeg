@@ -59,7 +59,6 @@ union FFVdpPictureInfo {
 #ifdef VDP_DECODER_PROFILE_MPEG4_PART2_SP
         VdpPictureInfoMPEG4Part2 mpeg4;
 #endif
-    VdpPictureInfoMPEG4Part2 mpeg4;
 };
 
 /**
