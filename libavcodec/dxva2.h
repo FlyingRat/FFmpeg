@@ -86,6 +86,8 @@ struct dxva_context {
      * Private to the FFmpeg AVHWAccel implementation
      */
     unsigned report_id;
+    unsigned last_slice_count;
+
 };
 
 /**
