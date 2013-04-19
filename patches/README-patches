@@ -1,5 +1,5 @@
-This directory contains XBMC custom patches that are refactored to fit the FFmpeg
-n1.2 rev e820e3a distribution. 
+This directory contains XBMC custom patches that are refactored to fit
+version: FFmpeg HEAD, rev b691bc4, 2013-04-29.
 
 All patches in the patches folder are already applied to the ffmpeg code base and
 are only kept here for tracking history. Some of patches are ours and some are
@@ -14,8 +14,8 @@ file came from.
 Whenever you need to patch a new ffmpeg versions you apply the patch and then add
 the git diff to the patches folder in the next commit (if its a backport - adapt
 the patch so that it clearly states that it is a change from upstream and which
-commit in ffmpeg repo it is). Use an uniq patch number thus don't reuse numbers
-from obsolete patches.
+commit in ffmpeg repo it is). Please pick an uniq patch number that doesn't
+conflict with others in both the directories patches and patches/obsolete-patches.
 
 Refactored:
 ===========
