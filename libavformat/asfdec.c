@@ -1511,7 +1511,7 @@ static int asf_read_seek(AVFormatContext *s, int stream_index,
     }
 
     if (s->packet_size <= 0)
-        return -1;
+        return AVERROR(ENOSYS);
 
     if (st->codec->codec_type != AVMEDIA_TYPE_VIDEO)
         return -1;
